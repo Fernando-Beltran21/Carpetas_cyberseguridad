@@ -1,0 +1,41 @@
+services:
+  victim-protected:
+    build: ./victim-protected
+    container_name: http-victim-protected
+    hostname: victim-protected
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      labnet:
+        ipv4_address: 172.29.0.10
+
+  victim-unprotected:
+    build: ./victim-unprotected
+    container_name: http-victim-unprotected
+    hostname: victim-unprotected
+    networks:
+      labnet:
+        ipv4_address: 172.29.0.11
+
+  attacker:
+    build: ./attacker
+    container_name: http-attacker
+    hostname: attacker
+    depends_on:
+      - victim-protected
+      - victim-unprotected
+    environment:
+      DURATION: 45         # seconds to run the flood
+      CONCURRENCY: 150     # parallel workers per target
+      REQUESTS_PER_SECOND: 150 # aggregate request-start limit per target
+    networks:
+      labnet:
+        ipv4_address: 172.29.0.20
+
+networks:
+  labnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24

@@ -1,0 +1,32 @@
+services:
+  victim:
+    build: ./victim
+    container_name: f2b-victim
+    hostname: victim
+    cap_add:
+      - NET_ADMIN   # fail2ban needs this to insert iptables rules
+      - NET_RAW
+    networks:
+      labnet:
+        ipv4_address: 172.28.0.10
+
+  attacker:
+    build: ./attacker
+    container_name: f2b-attacker
+    hostname: attacker
+    depends_on:
+      - victim
+    environment:
+      TARGET: victim
+      ATTEMPTS: 10
+      DELAY: 1
+    networks:
+      labnet:
+        ipv4_address: 172.28.0.20
+
+networks:
+  labnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24

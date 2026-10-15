@@ -1,0 +1,14 @@
+[DEFAULT]
+# Ban after 3 failures inside 60s, for 2 minutes (short so the demo is quick)
+maxretry  = 3
+findtime  = 60
+bantime   = 120
+banaction = iptables-multiport
+ignoreip  = 127.0.0.1/8
+
+[sshd]
+enabled  = true
+port     = ssh
+filter   = sshd
+backend  = polling
+logpath  = /var/log/auth.log

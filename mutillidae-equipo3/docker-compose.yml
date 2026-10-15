@@ -1,0 +1,7 @@
+services:
+  mutillidae:
+    image: citizenstig/nowasp
+    container_name: mutillidae
+    ports:
+      - "127.0.0.1:8082:80"
+    restart: "no"

@@ -1,0 +1,30 @@
+services:
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop-lab
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - pentest-net
+
+  nuclei:
+    image: projectdiscovery/nuclei:latest
+    container_name: nuclei-scanner
+    profiles:
+      - scan
+    volumes:
+      - ./reports:/reports
+    networks:
+      - pentest-net
+    entrypoint: ["nuclei"]
+    command:
+      - "-target"
+      - "http://juice-shop:3000"
+      - "-severity"
+      - "info,low,medium,high,critical"
+      - "-jsonl-export"
+      - "/reports/nuclei-results.jsonl"
+
+networks:
+  pentest-net:
+    driver: bridge

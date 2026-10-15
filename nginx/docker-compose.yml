@@ -1,0 +1,10 @@
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - API_KEY=${API_KEY}
+      - API_UPSTREAM=${API_UPSTREAM:-http://host.docker.internal:8000}
+    ports:
+      - "8080:80"

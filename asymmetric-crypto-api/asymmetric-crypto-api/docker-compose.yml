@@ -1,0 +1,11 @@
+services:
+  asymmetric-crypto-api:
+    build: .
+    container_name: asymmetric-crypto-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - crypto_keys:/app/keys
+
+volumes:
+  crypto_keys:
